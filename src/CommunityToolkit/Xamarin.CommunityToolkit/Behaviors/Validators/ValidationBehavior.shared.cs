@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -81,9 +83,11 @@ namespace Xamarin.CommunityToolkit.Behaviors.Internals
 
 		public void ForceValidate() => UpdateState(true);
 
-		protected virtual object DecorateValue() => Value;
+		protected virtual object Decorate(object value) => value;
 
 		protected abstract bool Validate(object value);
+
+		protected abstract Task<bool> ValidateAsync(object value, CancellationToken token);
 
 		protected override void OnAttachedTo(VisualElement bindable)
 		{
@@ -168,7 +172,7 @@ namespace Xamarin.CommunityToolkit.Behaviors.Internals
 			if ((View?.IsFocused ?? false) && Flags.HasFlag(ValidationFlags.ForceMakeValidWhenFocused))
 				IsValid = true;
 			else if (isForced || (currentStatus != ValidationFlags.None && Flags.HasFlag(currentStatus)))
-				IsValid = Validate(DecorateValue());
+				IsValid = Validate(Decorate(Value));
 
 			UpdateStyle();
 		}

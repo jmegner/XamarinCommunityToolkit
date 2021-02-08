@@ -42,8 +42,8 @@ namespace Xamarin.CommunityToolkit.Behaviors
 			set => SetValue(MaximumDecimalPlacesProperty, value);
 		}
 
-		protected override object DecorateValue()
-			=> base.DecorateValue()?.ToString()?.Trim();
+		protected override object Decorate(object value)
+			=> base.Decorate(value)?.ToString()?.Trim();
 
 		protected override bool Validate(object value)
 		{
